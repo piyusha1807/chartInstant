@@ -1,0 +1,11 @@
+
+.accordion-delete {
+    .MuiAccordionSummary-content {
+        position: relative;
+        .MuiButtonBase-root {
+            padding: unset;
+            right: 0;
+            position: absolute;
+        }
+    }
+}
