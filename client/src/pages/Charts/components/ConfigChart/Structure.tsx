@@ -1,116 +1,95 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
+  // Accordion,
+  // AccordionDetails,
+  // AccordionSummary,
+  // Box,
+  // Button,
+  // Dialog,
+  // DialogContent,
+  // DialogTitle,
   MenuItem,
-  Paper,
+  // Paper,
   Stack,
   TextField,
-  Typography,
-  IconButton,
+  // Typography,
+  // IconButton,
+  Select,
+  OutlinedInput
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import AddIcon from '@mui/icons-material/Add';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+// import AddIcon from '@mui/icons-material/Add';
 import '../../styles/configChart.scss';
-import ColorPicker from '../../../../components/ColorPicker';
-
-const iconList = [
-  { name: 'bar', titleName: 'Bar', path: '/static/images/bar.png' },
-  { name: 'pie', titleName: 'Pie', path: '/static/images/pie.png' },
-  { name: 'donut', titleName: 'Donut', path: '/static/images/pie.png' },
-  { name: 'scatter', titleName: 'Scatter', path: '/static/images/scatter.png' },
-  { name: 'donut', titleName: 'Donut', path: '/static/images/donut.png' },
-  { name: 'area', titleName: 'Area', path: '/static/images/area.png' },
-  { name: 'lines', titleName: 'Lines', path: '/static/images/area.png' },
-  { name: 'stacked_column', titleName: 'Stacked Column', path: '/static/images/area.png' },
-];
+// import ColorPicker from '../../../../components/ColorPicker';
 
 const Structure = (props: any) => {
-  const { result, trace, setTrace, layout, setLayout } = props;
+  const { result, trace, setTrace } = props;
 
-  const [chartModal, setChartModal] = useState(false);
-
-  const handleDropdownChange = (value: string, index: number, type: string, typeValue: string) => {
-    const newArr = [...trace];
-    newArr[index][type] = result[value];
-    newArr[index][typeValue] = value;
-    setTrace(newArr);
-  };
-
-  const handleChartChange = (chartType: string, index: number, value: string) => {
-    const newArr = [...trace];
-    if (chartType === 'scatter') {
-      newArr[index].type = 'scatter';
-      newArr[index].mode = 'markers';
-    } else if (chartType === 'lines') {
-      newArr[index].type = 'scatter';
-      newArr[index].mode = 'lines+markers';
-    } else if (chartType === 'pie') {
-      newArr[index].type = 'pie';
-      newArr[index].hole = '0';
-    } else if (chartType === 'donut') {
-      newArr[index].type = 'pie';
-      newArr[index].hole = '.4';
-    } else if (chartType === 'stacked_column') {
-      newArr[index].type = 'bar';
-      setLayout({ ...layout, barmode: 'stack' });
-    } else {
-      newArr[index].type = chartType;
+  const handleDropdownChange = (value: any, type: string, typeValue: string) => {
+    if (typeValue === 'xValue') {
+      console.log(value);
+      const updatedTrace = trace.map((traceItem: any) => ({
+        ...traceItem,
+        [type]: result[value],
+        [typeValue]: value
+      }));
+      setTrace(updatedTrace);
+    } else if (typeValue === 'yValue') {
+      const updatedTrace = value.map((optionItem: any) => ({
+        ...trace[0],
+        [type]: result[optionItem],
+        [typeValue]: optionItem
+      }));
+      setTrace(updatedTrace);
     }
-    newArr[index].typeValue = value;
-    setTrace(newArr);
-    setChartModal(false);
   };
 
-  const handleColorChange = (value: string, index: number) => {
-    const newArr = [...trace];
-    newArr[index].marker.color = value;
-    setTrace(newArr);
-  };
-
-  const addTrace = () => {
-    setTrace([
-      ...trace,
-      {
-        x: [],
-        y: [],
-        xValue: '',
-        yValue: '',
-        typeValue: 'Bar',
-        type: 'bar',
-        mode: 'markers',
-        marker: { color: '#483c84' },
-      },
-    ]);
-  };
-
-  const removeTrace = () => {
-    const newArr = [...trace];
-    newArr.pop();
-    setTrace(newArr);
-  };
-
-  const handleChartModal = () => {
-    setChartModal(true);
-  };
+  // const handleColorChange = (value: string, index: number) => {
+  //   const newArr = [...trace];
+  //   newArr[index].marker.color = value;
+  //   setTrace(newArr);
+  // };
 
   return (
     <>
-      <Box sx={{ display: 'flex', flexDirection: 'row', p: 2 }}>
-        <Typography style={{ verticalAlign: 'middle', lineHeight: '35px' }}>Add Traces</Typography>
+      {/* <Box sx={{ display: 'flex', flexDirection: 'row', p: 2 }}> */}
+      <Stack spacing={2}>
+        <TextField
+          select
+          size="small"
+          label="X"
+          value={trace.map((item: any) => item.xValue)}
+          onChange={(e) => {
+            handleDropdownChange(e.target.value, 'x', 'xValue');
+          }}
+        >
+          {Object.keys(result).map((key) => (
+            <MenuItem value={key}>{key}</MenuItem>
+          ))}
+        </TextField>
+        <Select
+          size="small"
+          label="Y"
+          multiple
+          input={<OutlinedInput label="Chip" />}
+          value={trace.map((item: any) => item.yValue)}
+          onChange={(e) => {
+            handleDropdownChange(e.target.value, 'y', 'yValue');
+          }}
+        >
+          {Object.keys(result).map((key) => (
+            <MenuItem value={key}>{key}</MenuItem>
+          ))}
+        </Select>
+      </Stack>
+        {/* <Typography style={{ verticalAlign: 'middle', lineHeight: '35px' }}>Add Traces</Typography>
         <Box sx={{ flex: '1 1 auto' }} />
         <Button variant="outlined" onClick={addTrace}>
           <AddIcon /> Trace
         </Button>
-      </Box>
-      {trace &&
+      </Box> */}
+      {/* {trace &&
         trace.map((item: any, index: number) => {
           return (
             <Accordion defaultExpanded disableGutters>
@@ -133,49 +112,6 @@ const Structure = (props: any) => {
               </AccordionSummary>
               <AccordionDetails>
                 <Stack spacing={2}>
-                  <TextField
-                    label="Chart Type"
-                    value={item.typeValue}
-                    onClick={handleChartModal}
-                    size="small"
-                  />
-                  <Dialog open={chartModal} onClose={() => setChartModal(false)}>
-                    <DialogTitle>Select Chart type</DialogTitle>
-                    <DialogContent>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          '& > :not(style)': {
-                            m: 1,
-                            width: 128,
-                            height: 128,
-                          },
-                        }}
-                      >
-                        {iconList.map((item, idx) => {
-                          return (
-                            <Paper
-                              variant="outlined"
-                              onClick={() => {
-                                handleChartChange(item.name, index, item.titleName);
-                              }}
-                              style={{ textAlign: 'center', padding: '0.5em' }}
-                              key={idx}
-                            >
-                              <img
-                                src={item.path}
-                                alt={item.titleName}
-                                style={{ margin: 'auto' }}
-                              />
-                              <Typography style={{ marginTop: '0.5em' }}>
-                                {item.titleName}
-                              </Typography>
-                            </Paper>
-                          );
-                        })}
-                      </Box>
-                    </DialogContent>
-                  </Dialog>
                   {item.type === 'pie' || item.type === 'donut' ? (
                     <>
                       <TextField
@@ -220,10 +156,11 @@ const Structure = (props: any) => {
                           <MenuItem value={key}>{key}</MenuItem>
                         ))}
                       </TextField>
-                      <TextField
-                        select
+                      <Select
                         size="small"
                         label="Y"
+                        multiple
+                        input={<OutlinedInput label="Chip" />}
                         value={item.yValue}
                         onChange={(e) => {
                           handleDropdownChange(e.target.value, index, 'y', 'yValue');
@@ -232,7 +169,7 @@ const Structure = (props: any) => {
                         {Object.keys(result).map((key) => (
                           <MenuItem value={key}>{key}</MenuItem>
                         ))}
-                      </TextField>
+                      </Select>
                     </>
                   )}
                 </Stack>
@@ -245,7 +182,7 @@ const Structure = (props: any) => {
               </AccordionDetails>
             </Accordion>
           );
-        })}
+        })} */}
     </>
   );
 };

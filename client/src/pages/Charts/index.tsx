@@ -53,10 +53,16 @@ export default function Charts() {
   );
 
   useEffect(() => {
+    const data = localStorage.getItem('data') ?? '';
+    setData(JSON.parse(data))
+  }, [])
+
+  useEffect(() => {
     const { step, component } = getStepComponent(stepName, chartId, data, setData);
 
     setActiveStep(step);
     setActiveComponent(component);
+    localStorage.setItem('data', JSON.stringify(data));
   }, [stepName, chartId]);
 
   return (

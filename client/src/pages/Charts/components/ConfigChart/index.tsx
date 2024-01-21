@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Box } from '@mui/system';
 import { Button, Card, Grid, Tab, Tabs } from '@mui/material';
 import { useNavigate } from 'react-router';
-import _ from 'lodash';
 import Plot from 'react-plotly.js';
 import Structure from './Structure';
 import Common from './Common';
 import '../../styles/configChart.scss';
+import { convertArrayToObject } from '../../../../utils/utils';
+import SelectChart from './SelectChart';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -35,14 +36,10 @@ const ConfigChart = (props: any) => {
   const { data, setData } = props;
 
   const {
-    prepareData: { header, rows },
+    prepareData,
   } = data;
-  console.log('🚀 ~ file: index.tsx ~ line 39 ~ ConfigChart ~ header', header);
-  const keys = _.keys(rows[0]);
-  const result = _.zipObject(
-    keys,
-    _.map(keys, (key) => _.map(rows, key))
-  );
+  const result = convertArrayToObject(prepareData);
+  // const keys = _.keys(result);
 
   const [tabOption, setTabOption] = useState('structure');
   const [trace, setTrace] = useState<any>([
@@ -50,7 +47,7 @@ const ConfigChart = (props: any) => {
       x: [],
       y: [],
       xValue: '',
-      yValue: '',
+      yValue: [],
       typeValue: 'Bar',
       type: 'bar',
       mode: 'markers',
@@ -138,11 +135,20 @@ const ConfigChart = (props: any) => {
                 scrollButtons="auto"
                 aria-label="Configuration tabs"
               >
+                <Tab label="Select Chart" value="selectChart" />
                 <Tab label="Structure" value="structure" />
                 <Tab label="Common" value="common" />
               </Tabs>
             </Box>
             <Box style={{ height: '62vh', overflow: 'auto' }}>
+              <TabPanel value={tabOption} selValue="selectChart">
+                <SelectChart
+                  trace={trace}
+                  setTrace={setTrace}
+                  layout={layout}
+                  setLayout={setLayout}
+                />
+              </TabPanel>
               <TabPanel value={tabOption} selValue="structure">
                 <Structure
                   result={result}

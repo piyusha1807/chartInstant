@@ -78,7 +78,7 @@ const UploadData = (props: any) => {
         const wb = XLSX.read(bufferArray, { type: 'buffer' });
         const wsName = wb.SheetNames[0];
         const ws = wb.Sheets[wsName];
-        const data = XLSX.utils.sheet_to_csv(ws);
+        const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
         setSheetNames(wb.SheetNames);
         setSheets(wb.Sheets);
@@ -125,7 +125,7 @@ const UploadData = (props: any) => {
         uploadOpt,
         selectedFile,
         isFilePicked,
-        csvData: csvData.replace(/\n*$/, ''),
+        csvData,
       },
     });
     navigate('/chart/new/prepare');
