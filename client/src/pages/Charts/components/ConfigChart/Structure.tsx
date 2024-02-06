@@ -15,7 +15,7 @@ import {
   // Typography,
   // IconButton,
   Select,
-  OutlinedInput
+  OutlinedInput,
 } from '@mui/material';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
@@ -32,15 +32,17 @@ const Structure = (props: any) => {
       const updatedTrace = trace.map((traceItem: any) => ({
         ...traceItem,
         [type]: result[value],
-        [typeValue]: value
+        [typeValue]: value,
       }));
       setTrace(updatedTrace);
     } else if (typeValue === 'yValue') {
+      console.log({ value });
       const updatedTrace = value.map((optionItem: any) => ({
         ...trace[0],
         [type]: result[optionItem],
-        [typeValue]: optionItem
+        [typeValue]: optionItem,
       }));
+      console.log({ updatedTrace });
       setTrace(updatedTrace);
     }
   };
@@ -83,7 +85,7 @@ const Structure = (props: any) => {
           ))}
         </Select>
       </Stack>
-        {/* <Typography style={{ verticalAlign: 'middle', lineHeight: '35px' }}>Add Traces</Typography>
+      {/* <Typography style={{ verticalAlign: 'middle', lineHeight: '35px' }}>Add Traces</Typography>
         <Box sx={{ flex: '1 1 auto' }} />
         <Button variant="outlined" onClick={addTrace}>
           <AddIcon /> Trace

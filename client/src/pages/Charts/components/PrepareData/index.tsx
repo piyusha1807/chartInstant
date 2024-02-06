@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router';
 // import { makeStyles } from '@mui/styles';
 import { HotTable } from '@handsontable/react';
 // eslint-disable-next-line no-unused-vars
-import { registerAllModules } from 'handsontable/registry'; 
+import { registerAllModules } from 'handsontable/registry';
 import 'handsontable/dist/handsontable.full.min.css';
+import { useSelector } from 'react-redux';
+import DatasetDetails from './datasetDetails';
 // import _ from 'lodash';
 
 // const defaultTheme = createTheme();
@@ -25,11 +27,12 @@ import 'handsontable/dist/handsontable.full.min.css';
 
 const PrepareData = (props: any) => {
   const { data, setData } = props;
-  const { upload } = data;
+  const { uploadedData } = useSelector((state: any) => state.uploadReducer);
+
   const navigate = useNavigate();
   // const classes = useStyles();
 
-  const [prepareData, setPrepareData] = useState(upload?.csvData);
+  const [prepareData, setPrepareData] = useState(uploadedData);
 
   const handleTableChange = (change: any, source: any) => {
     const tempPrepareData = JSON.parse(JSON.stringify(prepareData));
@@ -45,39 +48,41 @@ const PrepareData = (props: any) => {
   const handleBack = () => {
     navigate('/chart/new/upload');
   };
-  
+
   const handleNext = () => {
     setData({
       ...data,
-      prepareData
-    })
+      prepareData,
+    });
     navigate('/chart/new/config');
   };
 
   return (
     <Card sx={{ padding: '1rem', marginTop: '1rem' }}>
-       <HotTable
-          id="hot"
-          data={prepareData || []}
-          width="100%"
-          height="25rem"
-          colHeaders
-          rowHeaders
-          customBorders
-          dropdownMenu
-          multiColumnSorting
-          filters
-          manualColumnResize
-          manualRowResize
-          afterChange={handleTableChange}
-          licenseKey="non-commercial-and-evaluation"
-       />
-      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+      <HotTable
+        id="hot"
+        data={prepareData || []}
+        width="60%"
+        height="25rem"
+        colHeaders
+        rowHeaders
+        customBorders
+        dropdownMenu
+        multiColumnSorting
+        filters
+        manualColumnResize
+        manualRowResize
+        afterChange={handleTableChange}
+        licenseKey="non-commercial-and-evaluation"
+      />
+      <DatasetDetails />
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', pt: 2 }}>
         <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
           Back
         </Button>
-        <Box sx={{ flex: '1 1 auto' }} />
-        <Button color="primary" variant="contained" onClick={handleNext}>Next</Button>
+        <Button color="primary" variant="contained" onClick={handleNext}>
+          Next
+        </Button>
       </Box>
     </Card>
   );

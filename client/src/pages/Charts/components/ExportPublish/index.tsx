@@ -93,11 +93,10 @@ const ExportPublish = (props: any) => {
               </Button>
             </Stack>
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', pt: 2 }}>
               <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
                 Back
               </Button>
-              <Box sx={{ flex: '1 1 auto' }} />
               <Button color="primary" variant="contained" onClick={handleNext}>
                 Create new
               </Button>

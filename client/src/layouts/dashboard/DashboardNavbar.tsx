@@ -13,8 +13,8 @@ import LanguagePopover from './LanguagePopover';
 
 // ----------------------------------------------------------------------
 
-const APPBAR_MOBILE = 54;
-const APPBAR_DESKTOP = 62;
+const APPBAR_MOBILE = 45;
+const APPBAR_DESKTOP = 50;
 
 const RootStyle = styled(AppBar)(({ theme }) => ({
   boxShadow: 'none',

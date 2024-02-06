@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/system';
 import { Button, Card, Grid, Tab, Tabs } from '@mui/material';
 import { useNavigate } from 'react-router';
@@ -35,9 +35,7 @@ const ConfigChart = (props: any) => {
   const navigate = useNavigate();
   const { data, setData } = props;
 
-  const {
-    prepareData,
-  } = data;
+  const { prepareData } = data;
   const result = convertArrayToObject(prepareData);
   // const keys = _.keys(result);
 
@@ -47,7 +45,7 @@ const ConfigChart = (props: any) => {
       x: [],
       y: [],
       xValue: '',
-      yValue: [],
+      yValue: '',
       typeValue: 'Bar',
       type: 'bar',
       mode: 'markers',
@@ -118,6 +116,18 @@ const ConfigChart = (props: any) => {
     setTabOption(newValue);
   };
 
+  useEffect(() => {
+    const keys = Object.keys(result);
+    const updatedTrace = trace.map((traceItem: any) => ({
+      ...traceItem,
+      x: result[keys[1]],
+      xValue: keys[1],
+      y: result[keys[5]],
+      yValue: keys[5],
+    }));
+    setTrace(updatedTrace);
+  }, []);
+
   return (
     <Box sx={{ padding: '1rem', marginTop: '1rem' }}>
       <Grid container spacing={{ xs: 1, sm: 2, md: 2 }} height="75vh" style={{ margin: 'unset' }}>
@@ -162,11 +172,10 @@ const ConfigChart = (props: any) => {
                 <Common layout={layout} setLayout={setLayout} />
               </TabPanel>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', pt: 2 }}>
               <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
                 Back
               </Button>
-              <Box sx={{ flex: '1 1 auto' }} />
               <Button color="primary" variant="contained" onClick={handleNext}>
                 Generate
               </Button>
