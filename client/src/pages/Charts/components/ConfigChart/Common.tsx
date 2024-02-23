@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Accordion,
   AccordionSummary,
@@ -34,6 +34,12 @@ const fontObj = [
 const Common = (props: any) => {
   const { layout, setLayout } = props;
 
+  const [expanded, setExpanded] = useState(null);
+
+  const handleAccordionChange = (panel: any) => (event: any, isExpanded: any) => {
+    setExpanded(isExpanded ? panel : null);
+  };
+
   const handleCanvasChange = (value: any, type: any) => {
     setLayout({ ...layout, [type]: value });
   };
@@ -63,13 +69,13 @@ const Common = (props: any) => {
   };
 
   return (
-    <>
+    <Stack sx={{ px: '0.5rem', py: '1rem' }}>
       <Stack
         direction="row"
         alignItems="center"
         justifyContent="space-between"
         spacing={2}
-        sx={{ m: '1rem' }}
+        // sx={{ m: '1rem' }}
       >
         <Typography>Size</Typography>
         <TextField
@@ -95,11 +101,38 @@ const Common = (props: any) => {
           onChange={(e) => handleCanvasChange(e.target.value, 'height')}
         />
       </Stack>
-      <Accordion disableGutters>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="title" id="title">
+      <ColorPicker
+        color={layout?.plot_bgcolor}
+        setColor={handleCanvasChange}
+        property={['plot_bgcolor']}
+        label="Plot color"
+      />
+      <ColorPicker
+        color={layout?.paper_bgcolor}
+        setColor={handleCanvasChange}
+        property={['paper_bgcolor']}
+        label="Paper color"
+      />
+      <Accordion
+        expanded={expanded === 'title'}
+        onChange={handleAccordionChange('title')}
+        disableGutters
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="title"
+          id="title"
+          sx={{ padding: '0px' }}
+        >
           <Typography>Title</Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails
+          style={{
+            backgroundColor: expanded === 'title' ? '#f4f4f696' : 'inherit',
+            borderRadius: '4px',
+            padding: '1rem',
+          }}
+        >
           <Stack spacing={2}>
             <TextField
               id="outlined-number"
@@ -151,6 +184,11 @@ const Common = (props: any) => {
                 label="X"
                 type="number"
                 size="small"
+                inputProps={{
+                  step: '0.1',
+                  min: '-1.0',
+                  max: '1.0',
+                }}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -162,6 +200,11 @@ const Common = (props: any) => {
                 label="Y"
                 type="number"
                 size="small"
+                inputProps={{
+                  step: '0.1',
+                  min: '-1.0',
+                  max: '1.0',
+                }}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -173,15 +216,26 @@ const Common = (props: any) => {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion disableGutters>
+      <Accordion
+        expanded={expanded === 'verticalAxis'}
+        onChange={handleAccordionChange('verticalAxis')}
+        disableGutters
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="vertical axis"
           id="vertical-axis"
+          sx={{ padding: '0px' }}
         >
           <Typography>Vertical axis</Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails
+          style={{
+            backgroundColor: expanded === 'verticalAxis' ? '#f4f4f696' : 'inherit',
+            borderRadius: '4px',
+            padding: '1rem',
+          }}
+        >
           <Stack spacing={2}>
             <FormControlLabel
               control={
@@ -277,15 +331,26 @@ const Common = (props: any) => {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion disableGutters>
+      <Accordion
+        expanded={expanded === 'horizontalAxis'}
+        onChange={handleAccordionChange('horizontalAxis')}
+        disableGutters
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="horizontal axis"
           id="horizontal-axis"
+          sx={{ padding: '0px' }}
         >
           <Typography>Horizontal axis</Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails
+          style={{
+            backgroundColor: expanded === 'horizontalAxis' ? '#f4f4f696' : 'inherit',
+            borderRadius: '4px',
+            padding: '1rem',
+          }}
+        >
           <Stack spacing={2}>
             <FormControlLabel
               control={
@@ -381,11 +446,26 @@ const Common = (props: any) => {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion disableGutters>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="legend" id="legend">
+      <Accordion
+        expanded={expanded === 'legend'}
+        onChange={handleAccordionChange('legend')}
+        disableGutters
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="legend"
+          id="legend"
+          sx={{ padding: '0px' }}
+        >
           <Typography>Legend</Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails
+          style={{
+            backgroundColor: expanded === 'legend' ? '#f4f4f696' : 'inherit',
+            borderRadius: '4px',
+            padding: '1rem',
+          }}
+        >
           <FormControlLabel
             control={
               <Switch
@@ -470,21 +550,7 @@ const Common = (props: any) => {
           </Stack> */}
         </AccordionDetails>
       </Accordion>
-
-      <ColorPicker
-        color={layout?.plot_bgcolor}
-        setColor={handleCanvasChange}
-        property={['plot_bgcolor']}
-        label="Plot color"
-      />
-
-      <ColorPicker
-        color={layout?.paper_bgcolor}
-        setColor={handleCanvasChange}
-        property={['paper_bgcolor']}
-        label="Paper color"
-      />
-    </>
+    </Stack>
   );
 };
 

@@ -24,26 +24,46 @@ import '../../styles/configChart.scss';
 // import ColorPicker from '../../../../components/ColorPicker';
 
 const Structure = (props: any) => {
-  const { result, trace, setTrace } = props;
+  const {
+    result,
+    stringColumnKey,
+    onStringColumnKey,
+    numberColumnKeys,
+    onNumberColumnKeys,
+    chartType,
+  } = props;
 
-  const handleDropdownChange = (value: any, type: string, typeValue: string) => {
-    if (typeValue === 'xValue') {
-      console.log(value);
-      const updatedTrace = trace.map((traceItem: any) => ({
-        ...traceItem,
-        [type]: result[value],
-        [typeValue]: value,
-      }));
-      setTrace(updatedTrace);
-    } else if (typeValue === 'yValue') {
-      console.log({ value });
-      const updatedTrace = value.map((optionItem: any) => ({
-        ...trace[0],
-        [type]: result[optionItem],
-        [typeValue]: optionItem,
-      }));
-      console.log({ updatedTrace });
-      setTrace(updatedTrace);
+  const handleDropdownChange = (value: any, typeValue: string) => {
+    if (typeValue === 'stringKey') {
+      // const updatedTrace = trace.map((traceItem: any) => ({
+      //   ...traceItem,
+      //   [type]: result[value],
+      //   [typeValue]: value,
+      // }));
+      // setTrace(updatedTrace);
+      onStringColumnKey(value);
+    } else if (typeValue === 'numberKeys') {
+      // const updatedTrace = value.map((optionItem: any) => ({
+      //   ...trace[0],
+      //   [type]: result[optionItem],
+      //   [typeValue]: optionItem,
+      // }));
+      // setTrace(updatedTrace);
+      onNumberColumnKeys(value);
+    }
+  };
+
+  const getXLabel = () => {
+    if (
+      ['stackedColumn', 'groupedColumn', 'scatterPlot', 'lines', 'areaChart'].includes(chartType)
+    ) {
+      return 'X-axis';
+    } else if (['stackedBar', 'groupedBar'].includes(chartType)) {
+      return 'Y-axis';
+    } else if (['pieChart', 'donutChart'].includes(chartType)) {
+      return 'Label';
+    } else {
+      return 'X';
     }
   };
 
@@ -56,14 +76,14 @@ const Structure = (props: any) => {
   return (
     <>
       {/* <Box sx={{ display: 'flex', flexDirection: 'row', p: 2 }}> */}
-      <Stack spacing={2}>
+      <Stack spacing={2} sx={{ px: '0.5rem', py: '1rem' }}>
         <TextField
           select
           size="small"
-          label="X"
-          value={trace.map((item: any) => item.xValue)}
+          label={getXLabel()}
+          value={stringColumnKey}
           onChange={(e) => {
-            handleDropdownChange(e.target.value, 'x', 'xValue');
+            handleDropdownChange(e.target.value, 'stringKey');
           }}
         >
           {Object.keys(result).map((key) => (
@@ -72,12 +92,12 @@ const Structure = (props: any) => {
         </TextField>
         <Select
           size="small"
-          label="Y"
+          label="Series"
           multiple
           input={<OutlinedInput label="Chip" />}
-          value={trace.map((item: any) => item.yValue)}
+          value={numberColumnKeys}
           onChange={(e) => {
-            handleDropdownChange(e.target.value, 'y', 'yValue');
+            handleDropdownChange(e.target.value, 'numberKeys');
           }}
         >
           {Object.keys(result).map((key) => (

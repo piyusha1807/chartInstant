@@ -21,14 +21,14 @@ const MainStyle = styled('div')(({ theme }) => ({
   flexGrow: 1,
   overflow: 'auto',
   minHeight: '100%',
-  paddingTop: APP_BAR_MOBILE + 16,
+  paddingTop: APP_BAR_MOBILE,
   paddingBottom: theme.spacing(10),
   [theme.breakpoints.up('lg')]: {
-    paddingTop: APP_BAR_DESKTOP + 16,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    paddingTop: APP_BAR_DESKTOP,
+    // paddingLeft: theme.spacing(2),
+    // paddingRight: theme.spacing(2),
   },
-  backgroundColor: '#ebf0f8',
+  backgroundColor: '#f4f4f6',
 }));
 
 // ----------------------------------------------------------------------

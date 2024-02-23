@@ -68,7 +68,7 @@ export default function Charts() {
   return (
     <Page title="Create charts - ChartInstant">
       {/* <Card sx={{ padding: '1rem', marginTop: '1rem' }}>{activeComponent}</Card> */}
-      <Box>
+      <Box sx={{ margin: '1rem auto 1rem auto', maxWidth: 'md' }}>
         <Stepper activeStep={activeStep}>
           {steps.map((label) => {
             return (
@@ -78,8 +78,8 @@ export default function Charts() {
             );
           })}
         </Stepper>
-        {activeComponent}
       </Box>
+      {activeComponent}
     </Page>
   );
 }

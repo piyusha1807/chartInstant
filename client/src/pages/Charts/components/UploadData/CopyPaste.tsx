@@ -9,10 +9,20 @@ const CopyPaste = () => {
   const dispatch = useDispatch();
   const { copyPaste } = useSelector((state: any) => state.uploadReducer);
 
-  const [data, setData] = useState<any>(copyPaste?.data ?? []);
+  const [data, setData] = useState<string>(copyPaste?.data ?? '');
 
-  const handleTextChange = (e: { target: { value: React.SetStateAction<string> } }) => {
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setData(e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const textarea = e.target as HTMLTextAreaElement;
+      const { selectionStart, selectionEnd, value } = textarea;
+      const newValue = value.substring(0, selectionStart) + '\t' + value.substring(selectionEnd);
+      setData(newValue);
+    }
   };
 
   const convertTabSepratorToJson = (inputValue: string) => {
@@ -34,24 +44,26 @@ const CopyPaste = () => {
   };
 
   return (
-    <Stack spacing={1}>
-      <div>
-        <Typography variant="body1">
-          Paste your data from Excel, Word, or any other source into the text area below.
-        </Typography>
-        <TextField
-          fullWidth
-          multiline
-          rows={10}
-          variant="filled"
-          value={data}
-          onChange={handleTextChange}
-          placeholder="Paste your copied data here..."
-        />
-        <p>Supported formats: tab-separated, and plain text.</p>
-      </div>
-      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', pt: 2 }}>
-        <Button color="primary" variant="contained" onClick={handleNext}>
+    <Stack spacing={2}>
+      <Typography variant="body2">Paste your data from Excel, Word, or any other source into the text area below:</Typography>
+      <TextField
+        fullWidth
+        multiline
+        rows={8}
+        variant="outlined"
+        value={data}
+        onChange={handleTextChange}
+        onKeyDown={handleKeyDown} // Handle tab key
+        placeholder="Paste your copied data here..."
+      />
+      <Typography variant="body2" color="textSecondary">Supported formats: Tab-separated and plain text.</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={handleNext}
+          disabled={!data.trim()}
+        >
           Next
         </Button>
       </Box>

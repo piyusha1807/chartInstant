@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Typography, Stack, Box, Popover } from '@mui/material';
 import { ChromePicker } from 'react-color';
 
 const ColorPicker = (props: any) => {
   const { color, setColor, property, label } = props;
-  const [showColorPicker, setShowColorPicker] = useState(false);
+
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
   return (
     <>
       <Stack
@@ -15,30 +28,8 @@ const ColorPicker = (props: any) => {
         sx={{ my: 1 }}
       >
         <Typography>{label}</Typography>
-        {/* <Box
-          sx={{
-            width: 80,
-            height: 35,
-            backgroundColor: color,
-            borderRadius: '5px',
-            border: '1px solid #a2a4a7',
-            boxShadow: '-7px 9px 25px -6px rgba(184,184,184,1)',
-          }}
-          onClick={() => setShowColorPicker(!showColorPicker)}
-        >
-          <p
-            style={{
-              color: 'white',
-              textAlign: 'center',
-              verticalAlign: 'middle',
-              lineHeight: '35px',
-              cursor: 'pointer',
-            }}
-          >
-            {color}
-          </p>
-        </Box> */}
         <Box
+          aria-describedby={id}
           sx={{
             width: 100,
             height: 40,
@@ -47,9 +38,9 @@ const ColorPicker = (props: any) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '0px 8px'
+            padding: '0px 8px',
           }}
-          onClick={() => setShowColorPicker(!showColorPicker)}
+          onClick={(e: any) => handleClick(e)}
         >
           <Box
             sx={{
@@ -67,13 +58,13 @@ const ColorPicker = (props: any) => {
           />
         </Box>
         <Popover
-          // id={id}
-          open={showColorPicker}
-          // anchorEl={anchorEl}
-          onClose={() => setShowColorPicker(false)}
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
           anchorOrigin={{
             vertical: 'bottom',
-            horizontal: 'left'
+            horizontal: 'left',
           }}
         >
           <ChromePicker color={color} onChange={(e) => setColor(e.hex, ...property)} />

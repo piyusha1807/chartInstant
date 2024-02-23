@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
-import { alpha, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 import Button from '@mui/material/Button';
 import shoppingBagFill from '@iconify/icons-eva/shopping-bag-fill';
@@ -16,11 +16,11 @@ import LanguagePopover from './LanguagePopover';
 const APPBAR_MOBILE = 45;
 const APPBAR_DESKTOP = 50;
 
-const RootStyle = styled(AppBar)(({ theme }) => ({
+const RootStyle = styled(AppBar)(() => ({
   boxShadow: 'none',
   backdropFilter: 'blur(6px)',
   WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
-  backgroundColor: alpha(theme.palette.background.default, 0.72),
+  backgroundColor: 'white',
 }));
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({

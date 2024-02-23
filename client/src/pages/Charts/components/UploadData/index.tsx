@@ -43,7 +43,7 @@ const UploadData = () => {
   };
 
   return (
-    <Card sx={{ padding: '1rem', marginTop: '1rem' }}>
+    <Card sx={{ padding: '1rem', maxWidth: 'md', marginLeft: 'auto', marginRight: 'auto' }}>
       <Stack spacing={1}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
